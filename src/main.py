@@ -12,10 +12,16 @@ from vex import *
 
 # Brain should be defined by default
 brain=Brain()
+brain.screen.print("Program started!")
+brain.screen.print("Define: Brain defined")
 brain_inertial = Inertial()
-motorone=Motor(Ports.PORT7, True)
-motortwo=Motor(Ports.PORT12, True)
-claw_motor = Motor(Ports.PORT4, True)
+brain.screen.print("Define: Inertial defined")
+leftmotor=Motor(Ports.PORT7, True)
+brain.screen.print("Define: Left motor defined")
+rightmotor=Motor(Ports.PORT12, True)
+brain.screen.print("Define: Right motor defined")
+claw_motor = Motor(Ports.PORT10, True)
+brain.screen.print("Define: Claw motor defined")
 
 
 
