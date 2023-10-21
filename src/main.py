@@ -54,6 +54,7 @@ brain.screen.print(" Python-Robotics")
 
 #Add color to Touchled:
 touchled.set_color(Color.BLUE)
+#Claw Motor ready position:
 claw_motor.spin_to_position(-40, DEGREES)
 
 
