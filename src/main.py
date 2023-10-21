@@ -27,6 +27,7 @@ brain.screen.print("Define: Right motor defined")
 brain.screen.next_row()
 claw_motor = Motor(Ports.PORT10, True)
 brain.screen.print("Define: Claw motor defined")
+wait(5)
 brain.screen.clear_screen()
 
 
