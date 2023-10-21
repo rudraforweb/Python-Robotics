@@ -77,7 +77,6 @@ def place_holder_text():
     brain.screen.print("Python-Robotics")
     
 def off_edge():
-    if True:
         if distance.object_distance(INCHES) > 1:
             brain.screen.clear_screen()
             brain.screen.set_cursor(2, 2)
