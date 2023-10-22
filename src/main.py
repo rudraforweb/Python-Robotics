@@ -28,7 +28,7 @@ wait(0.2, SECONDS)
 brain.screen.next_row()
 leftmotor=Motor(Ports.PORT7, False)
 rightmotor=Motor(Ports.PORT12, True)
-drivetrain=DriveTrain(leftmotor, rightmotor)
+smartdrive=SmartDrive(leftmotor, rightmotor,brain_inertial)
 brain.screen.print("Drivetrain good!")
 wait(0.2, SECONDS)
 brain.screen.next_row()
@@ -50,43 +50,49 @@ brain.screen.print("Distance sensor good!")
 wait(0.2, SECONDS)
 brain.screen.next_row()
 brain.battery.capacity()
-brain.screen.print("Battery good!")
+brain.screen.print("Battery good!")                 
 wait(0.2, SECONDS)
 touchled.set_color(Color.GREEN)
 wait(1, SECONDS)
 brain.screen.clear_screen()
-brain.screen.set_cursor(2, 2)
-brain.screen.set_font(FontType.PROP30)
-brain.screen.print("Python-Robotics")
 #End of "system check".
 
 #Define functions:
+run=2
 def left_turn():
-    drivetrain.turn_for(LEFT, 90, DEGREES)
+    brain_inertial.set_heading(0, DEGREES)
+    smartdrive.turn_to_heading(-90, DEGREES)
+    smartdrive.stop()
 
 def right_turn():
-    drivetrain.turn_for(RIGHT, 90, DEGREES)
+    brain_inertial.calibrate()
+    brain_inertial.set_heading(0, DEGREES)
+    smartdrive.turn_to_heading(90, DEGREES)
+    smartdrive.stop()
 
 def end_code():
     touchled.set_color(Color.RED)
-    drivetrain.stop()
+    smartdrive.stop()
 
 def place_holder_text():
     brain.screen.clear_screen()
+    brain.screen.set_font(FontType.PROP30)
     brain.screen.set_cursor(2, 2)
     brain.screen.print("Python-Robotics")
     
-def off_edge():
+def off_edge():  
+    if run > 1: 
         if distance.object_distance(INCHES) > 1:
             brain.screen.clear_screen()
             brain.screen.set_cursor(2, 2)
             brain.screen.print("Turning...")
-            drivetrain.drive_for(REVERSE, 200, MM, wait=True)
             right_turn()
         else:
-            drivetrain.drive(FORWARD)
-            place_holder_text()   
-
+            brain.screen.clear_screen()
+            brain.screen.set_cursor(2,2)
+            brain.screen.print("hi") 
+            smartdrive.drive(FORWARD)
+              
 #Add color to Touchled:
 touchled.set_color(Color.BLUE)
 
@@ -94,4 +100,7 @@ touchled.set_color(Color.BLUE)
 claw_motor.spin_to_position(-40, DEGREES)
 
 #Main code:
+left_turn()
+off_edge()
+brain.screen.print()
 
