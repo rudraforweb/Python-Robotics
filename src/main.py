@@ -60,12 +60,13 @@ brain.screen.clear_screen()
 #Define functions:
 run=2
 def left_turn():
+    smartdrive.set_turn_velocity(20, PERCENT)
     brain_inertial.set_heading(0, DEGREES)
     smartdrive.turn_to_heading(-90, DEGREES)
     smartdrive.stop()
 
 def right_turn():
-    brain_inertial.calibrate()
+    smartdrive.set_turn_velocity(20, PERCENT)
     brain_inertial.set_heading(0, DEGREES)
     smartdrive.turn_to_heading(90, DEGREES)
     smartdrive.stop()
@@ -89,7 +90,7 @@ def measure_distance():
             right_turn()
             break
 def black_line():
-       while color.hue == range(228, 230):
+       while color.color() == Color.BLACK:
             smartdrive.stop()
             wait(1, SECONDS)
             smartdrive.drive(FORWARD)
