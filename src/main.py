@@ -29,10 +29,11 @@ brain.screen.next_row()
 leftmotor=Motor(Ports.PORT7, False)
 rightmotor=Motor(Ports.PORT12, True)
 smartdrive=SmartDrive(leftmotor, rightmotor,brain_inertial)
+smartdrive.set_turn_velocity(20, PERCENT)
 brain.screen.print("Drivetrain good!")
 wait(0.2, SECONDS)
 brain.screen.next_row()
-claw_motor = Motor(Ports.PORT10, True)
+claw_motor = Motor(Ports.PORT10, False)
 claw_motor.set_max_torque(50, PERCENT)
 brain.screen.print("Claw motor good!")
 wait(0.2, SECONDS)
@@ -40,7 +41,7 @@ brain.screen.next_row()
 brain.screen.print("Touchled good!")
 wait(0.2, SECONDS)
 brain.screen.next_row()
-color = ColorSensor(Ports.PORT11)
+color =ColorSensor(Ports.PORT11)
 color.set_light(100, PERCENT)
 brain.screen.print("Color sensor good!")
 wait(0.2, SECONDS)
@@ -58,17 +59,16 @@ brain.screen.clear_screen()
 #End of "system check".
 
 #Define functions:
-run=2
 def left_turn():
     smartdrive.set_turn_velocity(20, PERCENT)
     brain_inertial.set_heading(0, DEGREES)
-    smartdrive.turn_to_heading(-90, DEGREES)
+    smartdrive.turn_to_heading(-91, DEGREES)
     smartdrive.stop()
 
 def right_turn():
     smartdrive.set_turn_velocity(20, PERCENT)
     brain_inertial.set_heading(0, DEGREES)
-    smartdrive.turn_to_heading(90, DEGREES)
+    smartdrive.turn_to_heading(89, DEGREES)
     smartdrive.stop()
 
 def end_code():
@@ -84,30 +84,35 @@ def place_holder_text():
 def measure_distance():
     while distance.object_distance(INCHES) < 1:
         wait(0.2, SECONDS)
-        smartdrive.set_stopping(BRAKE)
+        smartdrive.set_stopping(COAST)
         if distance.object_distance(INCHES) > 1:
             smartdrive.stop()
             right_turn()
             break
 def black_line():
-       while color.color() == Color.BLACK:
+    print("Brightness", color.brightness())
+    while int(color.brightness()) >= 30: #type: ignore
+        wait(0.2, SECONDS)
+        smartdrive.set_stopping(HOLD)
+        if int(color.brightness()) <= 30: #type: ignore 
+            wait(0.2, SECONDS)
+            #type: ignore
             smartdrive.stop()
             wait(1, SECONDS)
             smartdrive.drive(FORWARD)
-            break
 place_holder_text()         
 #Add color to Touchled:
 touchled.set_color(Color.BLUE)
 
 #Claw Motor ready position:
-claw_motor.spin_to_position(-40, DEGREES)
+claw_motor.spin_to_position(40, DEGREES)
 
 #Main code:
 left_turn()
 smartdrive.drive(FORWARD)
 measure_distance()
-smartdrive.set_drive_velocity(100, PERCENT)
-smartdrive.set_stopping(HOLD)
+smartdrive.set_drive_velocity(30, PERCENT)
+smartdrive.set_turn_velocity(20, PERCENT)
 smartdrive.drive(FORWARD)
 black_line()
 
