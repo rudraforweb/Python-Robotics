@@ -80,19 +80,21 @@ def place_holder_text():
     brain.screen.set_cursor(2, 2)
     brain.screen.print("Python-Robotics")
     
-def off_edge():  
-    if run > 1: 
+def measure_distance():
+    while distance.object_distance(INCHES) < 1:
+        wait(0.2, SECONDS)
+        smartdrive.set_stopping(BRAKE)
         if distance.object_distance(INCHES) > 1:
-            brain.screen.clear_screen()
-            brain.screen.set_cursor(2, 2)
-            brain.screen.print("Turning...")
+            smartdrive.stop()
             right_turn()
-        else:
-            brain.screen.clear_screen()
-            brain.screen.set_cursor(2,2)
-            brain.screen.print("hi") 
+            break
+def black_line():
+       while color.hue == range(228, 230):
+            smartdrive.stop()
+            wait(1, SECONDS)
             smartdrive.drive(FORWARD)
-              
+            break
+place_holder_text()         
 #Add color to Touchled:
 touchled.set_color(Color.BLUE)
 
@@ -101,6 +103,12 @@ claw_motor.spin_to_position(-40, DEGREES)
 
 #Main code:
 left_turn()
-off_edge()
-brain.screen.print()
+smartdrive.drive(FORWARD)
+measure_distance()
+smartdrive.set_drive_velocity(100, PERCENT)
+smartdrive.set_stopping(HOLD)
+smartdrive.drive(FORWARD)
+black_line()
+
+
 
