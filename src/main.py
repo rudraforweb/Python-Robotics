@@ -68,7 +68,6 @@ def left_turn():
     brain_inertial.set_heading(0, DEGREES)
     smartdrive.turn_to_heading(-87, DEGREES)
     smartdrive.stop()
-
 def right_turn():
     smartdrive.set_turn_velocity(20, PERCENT)
     brain_inertial.set_heading(0, DEGREES)
@@ -86,8 +85,9 @@ def measure_distance():
     while distance.object_distance(INCHES) < 1:
         wait(0.2, SECONDS)
         smartdrive.set_drive_velocity(75)
-        smartdrive.set_stopping(COAST)
+        smartdrive.set_stopping(HOLD)
         if distance.object_distance(INCHES) > 1:
+            smartdrive.drive_for(FORWARD, 30, MM)
             smartdrive.stop()
             right_turn()
             break
@@ -114,8 +114,10 @@ def black_line():
             smartdrive.drive(FORWARD)
             break
 def place_in_box():
-    smartdrive.drive_for(FORWARD, 100, MM)
     smartdrive.drive_for(REVERSE, 100, MM)
+    claw_down()
+    smartdrive.drive_for(FORWARD, 100, MM)
+    claw_up()
 place_holder_text()         
 #Add color to Touchled:
 touchled.set_color(Color.BLUE)
@@ -128,18 +130,20 @@ smartdrive.set_turn_velocity(5, PERCENT)
 left_turn()
 smartdrive.drive(FORWARD)
 measure_distance()
-smartdrive.set_drive_velocity(60, PERCENT)
+smartdrive.set_drive_velocity(30, PERCENT)
 smartdrive.drive(FORWARD)
 black_line()
 claw_down()
 measure_distance_c()
-smartdrive.set_turn_velocity(50, PERCENT)
+smartdrive.set_turn_velocity(20, PERCENT)
 smartdrive.set_drive_velocity(30, PERCENT)
-smartdrive.drive_for(FORWARD, 250, MM)
+smartdrive.drive_for(FORWARD, 275, MM)
 brain_inertial.set_heading(0, DEGREES)
 smartdrive.turn_to_heading(-87, DEGREES)
 claw_up()
 place_in_box()
+right_turn()
+end_code()
 
 
 
