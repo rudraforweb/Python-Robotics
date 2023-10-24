@@ -66,15 +66,22 @@ def claw_down():
 def left_turn():
     smartdrive.set_turn_velocity(20, PERCENT)
     brain_inertial.set_heading(0, DEGREES)
-    smartdrive.turn_to_heading(-87, DEGREES)
+    smartdrive.turn_to_heading(-90, DEGREES)
     smartdrive.stop()
 def right_turn():
     smartdrive.set_turn_velocity(20, PERCENT)
     brain_inertial.set_heading(0, DEGREES)
-    smartdrive.turn_to_heading(87, DEGREES)
+    smartdrive.turn_to_heading(90, DEGREES)
     smartdrive.stop()
+def long_right_turn():
+    leftmotor.spin_for(FORWARD, 440, DEGREES)
+    leftmotor.stop()
+def long_left_turn():
+    rightmotor.spin_for(FORWARD, 440, DEGREES)
+    rightmotor.stop()
 def end_code():
     touchled.set_color(Color.RED)
+    claw_down()
     smartdrive.stop()
 def place_holder_text():
     brain.screen.clear_screen()
@@ -83,13 +90,14 @@ def place_holder_text():
     brain.screen.print("Python-Robotics")    
 def measure_distance():
     while distance.object_distance(INCHES) < 1:
-        wait(0.2, SECONDS)
-        smartdrive.set_drive_velocity(75)
-        smartdrive.set_stopping(HOLD)
+        wait(0.1, SECONDS)
+        smartdrive.set_drive_velocity(40, PERCENT)
         if distance.object_distance(INCHES) > 1:
-            smartdrive.drive_for(FORWARD, 30, MM)
             smartdrive.stop()
-            right_turn()
+            smartdrive.drive_for(REVERSE, 7, MM)
+            print("hi")
+            long_right_turn()
+            print("bye")
             break
 def measure_distance_c():
     while distance.object_distance(INCHES) < 1:
@@ -99,7 +107,6 @@ def measure_distance_c():
         if distance.object_distance(INCHES) > 1:
             smartdrive.stop()
             smartdrive.drive_for(REVERSE, 50, MM)
-            right_turn()
             break
 def black_line():
     print("Brightness", color.brightness())
@@ -108,38 +115,37 @@ def black_line():
         smartdrive.set_stopping(BRAKE)
         if int(color.brightness()) <= 30: #type: ignore 
             wait(0.1, SECONDS)
-            #type: ignore
             smartdrive.stop()
-            wait(2, SECONDS)
+            wait(1, SECONDS)
             smartdrive.drive(FORWARD)
             break
 def place_in_box():
-    smartdrive.drive_for(REVERSE, 100, MM)
+    smartdrive.drive_for(REVERSE, 125, MM)
     claw_down()
-    smartdrive.drive_for(FORWARD, 100, MM)
+    smartdrive.drive_for(FORWARD, 125, MM)
     claw_up()
 place_holder_text()         
 #Add color to Touchled:
 touchled.set_color(Color.BLUE)
 
-#Claw Motor ready position:
-claw_up()
-
 #Main code:
 smartdrive.set_turn_velocity(5, PERCENT)
-left_turn()
+long_left_turn()
 smartdrive.drive(FORWARD)
 measure_distance()
-smartdrive.set_drive_velocity(30, PERCENT)
+claw_up()
 smartdrive.drive(FORWARD)
 black_line()
 claw_down()
 measure_distance_c()
+long_right_turn()
 smartdrive.set_turn_velocity(20, PERCENT)
 smartdrive.set_drive_velocity(30, PERCENT)
-smartdrive.drive_for(FORWARD, 275, MM)
-brain_inertial.set_heading(0, DEGREES)
-smartdrive.turn_to_heading(-87, DEGREES)
+smartdrive.drive(FORWARD)
+measure_distance_c()
+smartdrive.drive_for(REVERSE, 130, MM)
+leftmotor.spin_for(REVERSE, 440, DEGREES)
+wait(1, SECONDS)
 claw_up()
 place_in_box()
 right_turn()
