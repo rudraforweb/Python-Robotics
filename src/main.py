@@ -87,7 +87,7 @@ def place_holder_text():
     brain.screen.clear_screen()
     brain.screen.set_font(FontType.PROP30)
     brain.screen.set_cursor(2, 2)
-    brain.screen.print("Python-Robotics")    
+    brain.screen.print("  Python-Robotics")    
 def measure_distance():
     while distance.object_distance(INCHES) < 1:
         wait(0.1, SECONDS)
@@ -95,9 +95,6 @@ def measure_distance():
         if distance.object_distance(INCHES) > 1:
             smartdrive.stop()
             smartdrive.drive_for(REVERSE, 7, MM)
-            print("hi")
-            long_right_turn()
-            print("bye")
             break
 def measure_distance_c():
     while distance.object_distance(INCHES) < 1:
@@ -109,7 +106,6 @@ def measure_distance_c():
             smartdrive.drive_for(REVERSE, 50, MM)
             break
 def black_line():
-    print("Brightness", color.brightness())
     while int(color.brightness()) >= 30: #type: ignore
         wait(0.1, SECONDS)
         smartdrive.set_stopping(BRAKE)
@@ -133,6 +129,7 @@ smartdrive.set_turn_velocity(5, PERCENT)
 long_left_turn()
 smartdrive.drive(FORWARD)
 measure_distance()
+long_right_turn()
 claw_up()
 smartdrive.drive(FORWARD)
 black_line()
