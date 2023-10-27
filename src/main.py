@@ -146,7 +146,5 @@ wait(1, SECONDS)
 claw_up()
 place_in_box()
 right_turn()
-end_code()
-
 
 
