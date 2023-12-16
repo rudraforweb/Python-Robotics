@@ -74,10 +74,10 @@ def right_turn():
     smartdrive.turn_to_heading(90, DEGREES)
     smartdrive.stop()
 def long_right_turn():
-    leftmotor.spin_for(FORWARD, 440, DEGREES)
+    leftmotor.spin_for(FORWARD, 430, DEGREES)
     leftmotor.stop()
 def long_left_turn():
-    rightmotor.spin_for(FORWARD, 440, DEGREES)
+    rightmotor.spin_for(FORWARD, 430, DEGREES)
     rightmotor.stop()
 def end_code():
     touchled.set_color(Color.RED)
@@ -90,7 +90,7 @@ def place_holder_text():
     brain.screen.print("  Python-Robotics")    
 def measure_distance():
     while distance.object_distance(INCHES) < 1:
-        wait(0.1, SECONDS)
+        wait(0.01, SECONDS)
         smartdrive.set_drive_velocity(40, PERCENT)
         if distance.object_distance(INCHES) > 1:
             smartdrive.stop()
@@ -108,18 +108,31 @@ def measure_distance_c():
 def black_line():
     while int(color.brightness()) >= 30: #type: ignore
         wait(0.1, SECONDS)
-        smartdrive.set_stopping(BRAKE)
+        smartdrive.set_stopping(HOLD)
         if int(color.brightness()) <= 30: #type: ignore 
             wait(0.1, SECONDS)
+            claw_down()
             smartdrive.stop()
             wait(1, SECONDS)
             smartdrive.drive(FORWARD)
             break
 def place_in_box():
-    smartdrive.drive_for(REVERSE, 125, MM)
+    smartdrive.drive_for(REVERSE, 130, MM)
     claw_down()
     smartdrive.drive_for(FORWARD, 125, MM)
     claw_up()
+def _2a3a():
+    smartdrive.drive(FORWARD)
+    black_line()
+    smartdrive.drive_for(FORWARD, 400, MM)
+    leftmotor.spin_for(REVERSE, 440, DEGREES)
+    wait(1)
+    place_in_box()
+    smartdrive.drive_for(REVERSE, 200, MM)
+    claw_down()
+    smartdrive.drive_for(FORWARD, 200, MM)
+    right_turn()
+    
 place_holder_text()         
 #Add color to Touchled:
 touchled.set_color(Color.BLUE)
@@ -131,20 +144,23 @@ smartdrive.drive(FORWARD)
 measure_distance()
 long_right_turn()
 claw_up()
+smartdrive.set_drive_velocity(50,PERCENT)
 smartdrive.drive(FORWARD)
 black_line()
-claw_down()
 measure_distance_c()
 long_right_turn()
 smartdrive.set_turn_velocity(20, PERCENT)
 smartdrive.set_drive_velocity(30, PERCENT)
 smartdrive.drive(FORWARD)
 measure_distance_c()
-smartdrive.drive_for(REVERSE, 130, MM)
+smartdrive.drive_for(REVERSE, 140, MM)
 leftmotor.spin_for(REVERSE, 440, DEGREES)
 wait(1, SECONDS)
 claw_up()
 place_in_box()
 right_turn()
+smartdrive.drive_for(FORWARD, 9, INCHES)
+long_right_turn()
+_2a3a()
 
-
+end_code()
