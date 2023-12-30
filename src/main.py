@@ -64,15 +64,17 @@ def claw_up():
 def claw_down():
     claw_motor.spin_to_position(5, DEGREES)
 def left_turn():
-    smartdrive.set_turn_velocity(20, PERCENT)
+    smartdrive.set_turn_velocity(10, PERCENT)
     brain_inertial.set_heading(0, DEGREES)
-    smartdrive.turn_to_heading(-90, DEGREES)
+    smartdrive.turn_to_heading(-87, DEGREES)
     smartdrive.stop()
+    wait(1)
 def right_turn():
-    smartdrive.set_turn_velocity(20, PERCENT)
+    smartdrive.set_turn_velocity(10, PERCENT)
     brain_inertial.set_heading(0, DEGREES)
-    smartdrive.turn_to_heading(90, DEGREES)
+    smartdrive.turn_to_heading(87, DEGREES)
     smartdrive.stop()
+    wait(1)
 def long_right_turn():
     leftmotor.spin_for(FORWARD, 430, DEGREES)
     leftmotor.stop()
@@ -88,17 +90,25 @@ def place_holder_text():
     brain.screen.set_font(FontType.PROP30)
     brain.screen.set_cursor(2, 2)
     brain.screen.print("  Python-Robotics")    
+def measure_distance_start():
+    while distance.object_distance(INCHES) < 1:
+        wait(0.1, SECONDS)
+        smartdrive.set_drive_velocity(40, PERCENT)
+        if distance.object_distance(INCHES) > 1:
+            smartdrive.stop()
+            smartdrive.drive_for(FORWARD, 1, MM)
+            break
 def measure_distance():
     while distance.object_distance(INCHES) < 1:
         wait(0.1, SECONDS)
         smartdrive.set_drive_velocity(40, PERCENT)
         if distance.object_distance(INCHES) > 1:
             smartdrive.stop()
-            smartdrive.drive_for(REVERSE, 7, MM)
+            smartdrive.drive_for(REVERSE, 100, MM)
             break
 def measure_distance_c():
     while distance.object_distance(INCHES) < 1:
-        wait(0.2, SECONDS)
+        wait(0.1, SECONDS)
         smartdrive.set_drive_velocity(40)
         smartdrive.set_stopping(HOLD)
         if distance.object_distance(INCHES) > 1:
@@ -140,10 +150,10 @@ touchled.set_color(Color.BLUE)
 #Main code:
 smartdrive.set_turn_velocity(5, PERCENT)
 claw_up()
-long_left_turn()
+smartdrive.turn_for(LEFT, 23, DEGREES)
 smartdrive.drive(FORWARD)
-measure_distance()
-long_right_turn()
+measure_distance_start()
+smartdrive.turn_for(RIGHT, 23, DEGREES)
 smartdrive.set_drive_velocity(60,PERCENT)
 smartdrive.drive(FORWARD)
 black_line()
