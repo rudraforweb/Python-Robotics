@@ -9,12 +9,7 @@
 
 # Library imports
 from vex import *
-
-from claw_function import *
-from turns import *
-from measure_distance import *
-from utilities import *
-
+import utilities, measure_distance, turns, claw_function
 # Start of 'system check'.
 brain=Brain()
 touchled = Touchled(Ports.PORT9)
@@ -38,9 +33,9 @@ smartdrive.set_turn_velocity(20, PERCENT)
 brain.screen.print("Drivetrain good!")
 wait(0.2, SECONDS)
 brain.screen.next_row()
-claw_motor = Motor(Ports.PORT10, False)
-claw_motor.set_max_torque(50, PERCENT)
-brain.screen.print("Claw motor good!")
+claw_function.claw_motor = Motor(Ports.PORT10, False)
+claw_function.claw_motor.set_max_torque(50, PERCENT)
+brain.screen.print("claw_function.claw motor good!")
 wait(0.2, SECONDS)
 brain.screen.next_row()
 brain.screen.print("Touchled good!")
@@ -65,47 +60,50 @@ brain.screen.clear_screen()
 
 #Define functions:
 
+
+
+
 def _2a3a():
     smartdrive.drive(FORWARD)
-    black_line()
+    utilities.black_line()
     smartdrive.drive_for(FORWARD, 400, MM)
     leftmotor.spin_for(REVERSE, 440, DEGREES)
     wait(1)
-    place_in_box()
+    utilities.place_in_box()
     smartdrive.drive_for(REVERSE, 200, MM)
-    claw_down()
+    claw_function.claw_down()
     smartdrive.drive_for(FORWARD, 200, MM)
-    right_turn()
+    turns.right_turn()
     
-place_holder_text()         
+utilities.place_holder_text()         
 #Add color to Touchled:
 touchled.set_color(Color.BLUE)
 
 #Main code:
 smartdrive.set_turn_velocity(5, PERCENT)
-claw_up()
-left_turn()
+claw_function.claw_up()
+turns.left_turn()
 smartdrive.drive(FORWARD)
-measure_distance_start()
-right_turn()
+measure_distance.measure_distance_start()
+turns.right_turn()
 smartdrive.set_drive_velocity(60,PERCENT)
 smartdrive.drive(FORWARD)
-black_line()
+utilities.black_line()
 smartdrive.set_drive_velocity(30, PERCENT)
-measure_distance_c()
-right_turn()
+measure_distance.measure_distance_c()
+turns.right_turn()
 smartdrive.set_turn_velocity(20, PERCENT)
 smartdrive.drive(FORWARD)
-measure_distance()
+measure_distance.measure_distance()
 wait(1)
 smartdrive.drive_for(REVERSE, 110, MM)
 leftmotor.spin_for(REVERSE, 440, DEGREES)
 wait(1, SECONDS)
-claw_up()
-place_in_box()
-long_right_turn()
+claw_function.claw_up()
+utilities.place_in_box()
+turns.long_right_turn()
 smartdrive.drive_for(FORWARD, 9, INCHES)
-right_turn()
+turns.right_turn()
 _2a3a()
 
-end_code()
+utilities.end_code()
