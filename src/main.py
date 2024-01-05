@@ -37,6 +37,8 @@ wait(0.2, SECONDS)
 brain.screen.next_row()
 claw_motor = Motor(Ports.PORT10, False)
 claw_motor.set_max_torque(50, PERCENT)
+pusher = Motor(Ports.PORT1, True)
+pusher.set_max_torque(100, PERCENT)
 brain.screen.print("Claw motor good!")
 wait(0.2, SECONDS)
 brain.screen.next_row()
@@ -64,32 +66,31 @@ brain.screen.clear_screen()
 claw_up_degrees = 40
 claw_down_degrees = 5
 
-right_turn_degrees = 90
-left_turn_degrees = -90
+
 
 def claw_up():
     claw_motor.spin_to_position(claw_up_degrees, DEGREES)
 def claw_down():
     claw_motor.spin_to_position(claw_down_degrees, DEGREES)
 
-def left_turn():
+def left_turn(left_turn_degrees):
     smartdrive.set_turn_velocity(10, PERCENT)
     brain_inertial.set_heading(0, DEGREES)
-    smartdrive.turn_to_rotation(left_turn_degrees, DEGREES)
+    smartdrive.turn_to_heading(-left_turn_degrees, DEGREES)
     smartdrive.stop()
     wait(1)
-def right_turn():
+def right_turn(right_turn_degrees):
     smartdrive.set_turn_velocity(10, PERCENT)
     brain_inertial.set_heading(0, DEGREES)
-    smartdrive.turn_to_rotation(right_turn_degrees, DEGREES)
+    smartdrive.turn_to_heading(right_turn_degrees, DEGREES)
     smartdrive.stop()
     wait(1)
 def long_right_turn():
     leftmotor.spin_for(FORWARD, 430, DEGREES)
     leftmotor.stop()
 def long_left_turn():
-    rightmotor.spin_for(FORWARD, 430, DEGREES)
-    rightmotor.stop()
+    leftmotor.spin_for(REVERSE, 480, DEGREES)
+    leftmotor.stop()
 
 
 def measure_distance_start():
@@ -140,54 +141,61 @@ def black_line():
             smartdrive.drive(FORWARD)
             break
 def place_in_box():
-    smartdrive.drive_for(REVERSE, 130, MM)
-    claw_down()
-    smartdrive.drive_for(FORWARD, 125, MM)
     claw_up()
+    pusher.spin_to_position(70, DEGREES)
+    wait(1)
+    pusher.spin_to_position(0, DEGREES)
+    claw_down()
 
 
 
 def _2a3a():
+    claw_up()
     smartdrive.drive(FORWARD)
     black_line()
     smartdrive.drive_for(FORWARD, 400, MM)
-    leftmotor.spin_for(REVERSE, 440, DEGREES)
+    long_left_turn()
     wait(1)
     place_in_box()
-    smartdrive.drive_for(REVERSE, 200, MM)
-    claw_down()
-    smartdrive.drive_for(FORWARD, 200, MM)
-    right_turn()
+    right_turn(90)
+    smartdrive.drive(FORWARD)
+    measure_distance_start()
+    right_turn(87)
+    smartdrive.drive_for(FORWARD, 304, MM)
+
     
-place_holder_text()         
+place_holder_text()
 #Add color to Touchled:
 touchled.set_color(Color.BLUE)
 
 #Main code:
 smartdrive.set_turn_velocity(5, PERCENT)
+smartdrive.set_drive_velocity(5, PERCENT)
 claw_up()
-left_turn()
+left_turn(87)
 smartdrive.drive(FORWARD)
 measure_distance_start()
-right_turn()
+right_turn(85)
 smartdrive.set_drive_velocity(60,PERCENT)
 smartdrive.drive(FORWARD)
 black_line()
 smartdrive.set_drive_velocity(30, PERCENT)
 measure_distance_c()
-right_turn()
+right_turn(87)
 smartdrive.set_turn_velocity(20, PERCENT)
 smartdrive.drive(FORWARD)
 measure_distance()
 wait(1)
-smartdrive.drive_for(REVERSE, 110, MM)
-leftmotor.spin_for(REVERSE, 440, DEGREES)
+smartdrive.drive_for(REVERSE, 190, MM)
+left_turn(87)
 wait(1, SECONDS)
 claw_up()
 place_in_box()
-long_right_turn()
-smartdrive.drive_for(FORWARD, 9, INCHES)
-right_turn()
+right_turn(87)
+smartdrive.drive(FORWARD)
+measure_distance()
+smartdrive.drive_for(FORWARD, 170, MM)
+right_turn(87)
 _2a3a()
 
 end_code()
