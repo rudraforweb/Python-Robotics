@@ -15,6 +15,8 @@ from vex import *
 # Start of 'system check'.
 brain=Brain()
 touchledleft = Touchled(Ports.PORT9)
+touchledright = Touchled(Ports.PORT6)
+touchledright.set_color(Color.RED)
 touchledleft.set_color(Color.RED)
 brain.screen.set_font(FontType.MONO12)
 brain.screen.print("Running system check:")
@@ -56,8 +58,6 @@ wait(0.2, SECONDS)
 brain.screen.next_row()
 brain.battery.capacity()
 brain.screen.print("Battery good!")                 
-wait(0.2, SECONDS)
-touchledleft.set_color(Color.BLACK)
 wait(1, SECONDS)
 brain.screen.clear_screen()
 #End of "system check".
@@ -66,7 +66,19 @@ brain.screen.clear_screen()
 claw_up_degrees = 40
 claw_down_degrees = 5
 
-
+def default_lights():
+    touchledright.set_brightness(5)
+    touchledright.set_color(Color.RED)
+    touchledleft.set_brightness(5)
+    touchledleft.set_color(Color.RED)
+def stop():
+    touchledright.set_brightness(100)
+    touchledright.set_color(Color.RED)
+    touchledleft.set_brightness(100)
+    touchledleft.set_color(Color.RED)
+    smartdrive.stop()
+    wait(100, MSEC)
+    default_lights()
 
 def claw_up():
     claw_motor.spin_to_position(claw_up_degrees, DEGREES)
@@ -79,6 +91,14 @@ def blink_orange_left():
     touchledleft.set_brightness(0)
     wait(400)  # Wait for another 500 milliseconds (0.5 seconds)
     touchledleft.set_brightness(100)
+def blink_orange_right():
+    touchledright.set_brightness(100)
+    touchledright.set_color(Color.YELLOW_ORANGE)
+    wait(400)  # Wait for 500 milliseconds (0.5 seconds)
+    touchledright.set_brightness(0)
+    wait(400)  # Wait for another 500 milliseconds (0.5 seconds)
+    touchledright.set_brightness(100)
+
 
 def left_turn(left_turn_degrees):
     brain_inertial.set_heading(0, DEGREES)
@@ -93,7 +113,7 @@ def left_turn(left_turn_degrees):
     for _ in range(num_steps):
         blink_orange_left()
         smartdrive.turn_to_heading(-step_size, DEGREES)
-        smartdrive.set_turn_velocity(100)
+        smartdrive.set_turn_velocity(20)
         wait(wait_time, MSEC)
 
     # Adjust for any remaining degrees
@@ -101,24 +121,54 @@ def left_turn(left_turn_degrees):
     if remaining_degrees != 0:
         blink_orange_left()
         smartdrive.turn_to_heading(-remaining_degrees, DEGREES)
-        smartdrive.set_drive_velocity(100)
+        smartdrive.set_drive_velocity(20)
         wait(wait_time, MSEC)
 
     wait(1)
-    touchledleft.set_brightness(0)
+    default_lights()
 def right_turn(right_turn_degrees):
     brain_inertial.set_heading(0, DEGREES)
-    smartdrive.turn_to_heading(right_turn_degrees, DEGREES)
-    smartdrive.stop()
-    wait(1)
+
+    # Adjust step_size, wait time, and motor speed for faster execution
+    step_size = right_turn_degrees
+    wait_time = 5
+    motor_speed = 200  # Adjust as needed (in DPS)
+
+    # Break the turn into steps
+    num_steps = abs(right_turn_degrees) // step_size
+
+    for _ in range(num_steps):
+        blink_orange_right()
+        smartdrive.turn_to_heading(step_size, DEGREES)  # Note the positive turn direction
+        smartdrive.set_turn_velocity(20)
+        wait(wait_time, MSEC)
+
+    # Adjust for any remaining degrees
+    remaining_degrees = right_turn_degrees % step_size
+    if remaining_degrees != 0:
+        blink_orange_right()
+        smartdrive.turn_to_heading(right_turn_degrees, DEGREES)
+        smartdrive.set_turn_velocity(20)
+        wait(wait_time, MSEC)
+
+    stop()
+    default_lights()
 def long_right_turn():
-    leftmotor.spin_for(REVERSE, 470, DEGREES)
-    leftmotor.stop()
+    touchledleft.set_brightness(100)
+    touchledleft.set_color(Color.WHITE)
+    blink_orange_right()
+    rightmotor.spin_for(REVERSE, 470, DEGREES)
+    rightmotor.stop()
+    touchledleft.set_brightness(0)
+    touchledright.set_brightness(0)
 def long_left_turn():
+    touchledright.set_brightness(100)
+    touchledright.set_color(Color.WHITE)
     blink_orange_left()
     leftmotor.spin_for(REVERSE, 460, DEGREES)
-    touchledleft.set_brightness(0)
     leftmotor.stop()
+    touchledleft.set_brightness(0)
+    touchledright.set_brightness(0)
 
 
 def measure_distance_start():
@@ -127,14 +177,13 @@ def measure_distance_start():
         smartdrive.set_drive_velocity(40, PERCENT)
         if distance.object_distance(INCHES) > 1:
             smartdrive.drive_for(FORWARD, 65, MM)
-            smartdrive.stop()
+            stop()
             break
 def measure_distance():
     while distance.object_distance(INCHES) < 1:
         wait(0.1, SECONDS)
-        smartdrive.set_drive_velocity(40, PERCENT)
         if distance.object_distance(INCHES) > 1:
-            smartdrive.stop()
+            stop()
             wait(1)
             smartdrive.drive_for(REVERSE, 100, MM)
             break
@@ -144,20 +193,18 @@ def measure_distance_c():
         smartdrive.set_drive_velocity(40)
         smartdrive.set_stopping(HOLD)
         if distance.object_distance(INCHES) > 1:
-            smartdrive.stop()
+            stop()
             smartdrive.drive_for(REVERSE, 50, MM)
             break
 def end_code():
     touchledleft.set_color(Color.RED)
     claw_down()
-    smartdrive.stop()
-    
+    stop()    
 def place_holder_text():
     brain.screen.clear_screen()
     brain.screen.set_font(FontType.PROP30)
     brain.screen.set_cursor(2, 2)
     brain.screen.print("  Python-Robotics")    
-
 def black_line():
     while int(color.brightness()) >= 50: #type: ignore
         wait(0.1, SECONDS)
@@ -165,18 +212,45 @@ def black_line():
         if int(color.brightness()) <= 50: #type: ignore 
             wait(0.1, SECONDS)
             claw_down()
-            smartdrive.stop()
+            stop()
             wait(1, SECONDS)
             smartdrive.drive(FORWARD)
             break
 def place_in_box():
     claw_up()
     pusher.spin_to_position(70, DEGREES)
-    wait(1)
-    pusher.spin_to_position(0, DEGREES)
+    pusher.spin_to_position(1, DEGREES)
     claw_down()
 
-
+def _1c():
+    default_lights()
+    smartdrive.set_drive_velocity(20, PERCENT)
+    pusher.spin_to_position(1, DEGREES)
+    claw_up()
+    left_turn(88)
+    smartdrive.drive(FORWARD)
+    measure_distance_start()
+    right_turn(85)
+    smartdrive.set_drive_velocity(30,PERCENT)
+    smartdrive.drive(FORWARD)
+    black_line()
+    smartdrive.set_drive_velocity(30, PERCENT)
+    measure_distance_c()
+    right_turn(87)
+    smartdrive.set_turn_velocity(20, PERCENT)
+    smartdrive.drive(FORWARD)
+    measure_distance()
+    wait(1)
+    smartdrive.drive_for(REVERSE, 190, MM)
+    left_turn(87)
+    place_in_box()
+    right_turn(87)
+    smartdrive.drive(FORWARD)
+    smartdrive.set_drive_velocity(60, PERCENT)
+    measure_distance()
+    smartdrive.set_drive_velocity(40, PERCENT)
+    smartdrive.drive_for(FORWARD, 145, MM)
+    right_turn(90)
 
 def _2a3a():
     claw_up()
@@ -186,47 +260,45 @@ def _2a3a():
     long_left_turn()
     wait(1)
     place_in_box()
-    right_turn(91)
-    smartdrive.drive(FORWARD)
-    measure_distance()
-    smartdrive.drive_for(REVERSE, 200, MM)
-    right_turn(43)
+    right_turn(89)
+    smartdrive.drive_for(FORWARD, 150, MM)
     claw_up()
-    smartdrive.set_drive_velocity(30)
-    claw_down()
-
+    long_right_turn()
+    #smartdrive.set_drive_velocity(100)
+    #measure_distance()
+    #smartdrive.set_drive_velocity(40, PERCENT)
+    #smartdrive.drive_for(REVERSE, 200, MM)
+    #right_turn(40)
+    #claw_up()
+    #smartdrive.set_drive_velocity(30)
+    #smartdrive.drive_for(FORWARD, 250, MM)
+    #claw_down()
+    #smartdrive.drive_for(REVERSE, 250, MM)
+    #right_turn(130)
+    #smartdrive.set_drive_velocity(40, PERCENT)
+    #smartdrive.drive(FORWARD)
+    #measure_distance()
+    #smartdrive.set_drive_velocity(40, PERCENT)
+    #smartdrive.drive_for(REVERSE, 550, MM)
+    #right_turn(88)
+    #place_in_box()
+    #left_turn(88)
+    #smartdrive.drive_for(REVERSE, 350, MM)
+    #left_turn(30)
+    #claw_up()
+    #smartdrive.set_drive_velocity(30)
+    #smartdrive.drive_for(FORWARD, 250, MM)
+    #claw_down()
+    #left_turn(30)
+    #smartdrive.drive_for(FORWARD, 100, MM)
+    #left_turn(38)
     
 place_holder_text()
 
 
 #Main code:
-smartdrive.set_turn_velocity(5, PERCENT)
-smartdrive.set_drive_velocity(20, PERCENT)
-claw_up()
-left_turn(87)
-smartdrive.drive(FORWARD)
-measure_distance_start()
-right_turn(83)
-smartdrive.set_drive_velocity(30,PERCENT)
-smartdrive.drive(FORWARD)
-black_line()
-smartdrive.set_drive_velocity(30, PERCENT)
-measure_distance_c()
-right_turn(87)
-smartdrive.set_turn_velocity(20, PERCENT)
-smartdrive.drive(FORWARD)
-measure_distance()
-wait(1)
-smartdrive.drive_for(REVERSE, 190, MM)
-left_turn(87)
-wait(1, SECONDS)
-claw_up()
-place_in_box()
-right_turn(87)
-smartdrive.drive(FORWARD)
-measure_distance()
-smartdrive.drive_for(FORWARD, 160, MM)
-right_turn(90)
+#Choose between _2a3a, _2a3b, _2b3a, or _2b3b. _1c is required.
+_1c()
 _2a3a()
 
 end_code()
