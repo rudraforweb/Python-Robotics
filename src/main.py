@@ -66,6 +66,7 @@ brain.screen.clear_screen()
 claw_up_degrees = 40
 claw_down_degrees = 5
 
+#Touchleds:
 def default_lights():
     touchledright.set_brightness(5)
     touchledright.set_color(Color.RED)
@@ -84,11 +85,6 @@ def reverse_lights():
     touchledright.set_color(Color.WHITE)
     touchledleft.set_brightness(100)
     touchledleft.set_color(Color.WHITE)
-
-def claw_up():
-    claw_motor.spin_to_position(claw_up_degrees, DEGREES)
-def claw_down():
-    claw_motor.spin_to_position(claw_down_degrees, DEGREES)
 def blink_orange_left():
     touchledleft.set_brightness(100)
     touchledleft.set_color(Color.ORANGE)
@@ -104,14 +100,22 @@ def blink_orange_right():
     wait(400)  # Wait for another 500 milliseconds (0.5 seconds)
     touchledright.set_brightness(100)
 
+#Claw motor:
+def claw_up():
+    claw_motor.spin_to_position(claw_up_degrees, DEGREES)
+def claw_down():
+    claw_motor.spin_to_position(claw_down_degrees, DEGREES)
 
+#Turns:
 def left_turn(left_turn_degrees):
     blink_orange_left()
     smartdrive.turn_for(LEFT, left_turn_degrees, DEGREES)
+    smartdrive.turn_for(LEFT, 0, DEGREES)
     default_lights()
 def right_turn(right_turn_degrees):
     blink_orange_right()
     smartdrive.turn_for(RIGHT, right_turn_degrees, DEGREES)
+    smartdrive.turn_for(RIGHT, 0, DEGREES)
     default_lights()
 def long_right_turn():
     touchledleft.set_brightness(100)
@@ -130,7 +134,7 @@ def long_left_turn():
     touchledleft.set_brightness(0)
     touchledright.set_brightness(0)
 
-
+#Measure distances:
 def measure_distance_start():
     while distance.object_distance(INCHES) < 2:
         wait(0.1, SECONDS)
@@ -183,6 +187,7 @@ def left_measure_distance():
                 stop()
                 break
 
+#Others:
 def place_holder_text():
     brain.screen.clear_screen()
     brain.screen.set_font(FontType.PROP30)
@@ -205,16 +210,48 @@ def place_in_box():
     pusher.spin_to_position(2, DEGREES)
     claw_down()
 
+#Main code functions:
 def start():
-    #place code here depending on where the robot starts
-    default_lights()
-    claw_up()
-    pusher.spin_to_position(2, DEGREES)
-    smartdrive.set_drive_velocity(20, PERCENT)
-    left_turn(88)
+    if int(color.brightness()) <= 50: #type: ignore 
+        wait(0.1, SECONDS)
+        stop()
+        brain.screen.set_cursor(1,1)
+        brain.screen.print("Bit 1: Black")
+        smartdrive.drive(FORWARD)
+    else:
+        brain.screen.set_cursor(1,1)
+        brain.screen.print("Bit 1: White")
+
+
+    smartdrive.drive_for(FORWARD, 40, MM)
+
+
+    if int(color.brightness()) <= 50: #type: ignore 
+            wait(0.1, SECONDS)
+            stop()
+            brain.screen.set_cursor(2,1)
+            brain.screen.print("Bit 2: Black")
+            smartdrive.drive(FORWARD)
+    else:
+        brain.screen.set_cursor(2,1)
+        brain.screen.print("Bit 2: White")
+
+    smartdrive.drive_for(FORWARD, 40, MM)
+
+    if int(color.brightness()) <= 50: #type: ignore 
+            wait(0.1, SECONDS)
+            stop()
+            brain.screen.set_cursor(3,1)
+            brain.screen.print("Bit 3: Black")
+            stop()
+
+    else:
+        brain.screen.set_cursor(3,1)
+        brain.screen.print("Bit 3: White")
+        stop()
+         
 def _1c():   
     smartdrive.drive(FORWARD)
-    #measure_distance_start() right_turn(85)
     right_measure_distance()
     smartdrive.set_drive_velocity(60,PERCENT)
     smartdrive.drive(FORWARD)
