@@ -249,7 +249,9 @@ def start():
         brain.screen.set_cursor(3,1)
         brain.screen.print("Bit 3: White")
         stop()
-         
+    
+    left_turn(88)
+
 def _1c():   
     smartdrive.drive(FORWARD)
     right_measure_distance()
