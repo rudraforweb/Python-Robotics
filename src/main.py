@@ -253,14 +253,14 @@ def start():
     
     right_turn(88)
 
-def _1c():   
+def _1c():   #all good!
     smartdrive.drive(FORWARD)
     right_measure_distance(442, 50)
     smartdrive.set_drive_velocity(60,PERCENT)
     smartdrive.drive(FORWARD)
     black_line()
     smartdrive.set_drive_velocity(30, PERCENT)
-    right_measure_distance(445, 105)
+    right_measure_distance(445, 150)
     smartdrive.set_turn_velocity(20, PERCENT)
     smartdrive.drive(FORWARD)
     measure_distance()
@@ -270,13 +270,14 @@ def _1c():
     default_lights()
     left_turn(94)
     place_in_box()
-    right_turn(87)
+    right_turn(89)
     smartdrive.drive(FORWARD)
     smartdrive.set_drive_velocity(40, PERCENT)
-    right_measure_distance(422, 53)
+    right_measure_distance(422, 60)
     
 
 def _2a3b():
+    #2a: all good
     claw_up()
     smartdrive.set_drive_velocity(40,PERCENT)
     smartdrive.drive(FORWARD)
@@ -286,23 +287,25 @@ def _2a3b():
     long_left_turn(428)
     wait(1)
     place_in_box()
+    #food ball: all good
     left_turn(87)
     claw_up()
     reverse_lights()
-    smartdrive.drive_for(REVERSE, 330, MM)
+    smartdrive.drive_for(REVERSE, 350, MM)
     default_lights()
     left_turn(37)
-    smartdrive.drive_for(FORWARD, 210, MM)
+    smartdrive.drive_for(FORWARD, 270, MM)
     claw_down()
     wait(1, SECONDS)
-    left_turn(40)
+    left_turn(43)
     smartdrive.drive(FORWARD)
     measure_distance()
     place_in_box()
-    left_measure_distance(440, 40)
+    #3b: working on
+    left_measure_distance(430, 50)
     smartdrive.set_drive_velocity(70)
-    left_measure_distance(420,200)
-    '''smartdrive.drive(FORWARD)
+    claw_up()
+    smartdrive.drive(FORWARD)
     measure_distance_start()
     reverse_lights()
     smartdrive.drive_for(REVERSE, 350, MM)
@@ -311,8 +314,23 @@ def _2a3b():
     left_turn(30)
     claw_up()
     smartdrive.drive_for(FORWARD, 220, MM)
-    claw_down()'''
+    claw_down()
+    claw_down()
+    left_measure_distance(420, 40)
+    while int(color.brightness()) >= 50: #type: ignore
+        wait(0.1, SECONDS)
+        smartdrive.set_stopping(HOLD)
+        if int(color.brightness()) <= 50: #type: ignore 
+            wait(0.1, SECONDS)
+            smartdrive.drive_for(FORWARD, 50, MM)
+            stop()
+            wait(1, SECONDS)
+            break
+    left_turn(88)
+    measure_distance()
+    place_in_box()
     stop()
+    
     
 
 
