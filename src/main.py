@@ -260,20 +260,20 @@ def _1c():   #all good!
     smartdrive.drive(FORWARD)
     black_line()
     smartdrive.set_drive_velocity(30, PERCENT)
-    right_measure_distance(445, 150)
+    right_measure_distance(445, 135)
     smartdrive.set_turn_velocity(20, PERCENT)
     smartdrive.drive(FORWARD)
     measure_distance()
     wait(1)
     reverse_lights()
-    smartdrive.drive_for(REVERSE, 191, MM)
+    smartdrive.drive_for(REVERSE, 185, MM)
     default_lights()
     left_turn(94)
     place_in_box()
     right_turn(88)
     smartdrive.drive(FORWARD)
     smartdrive.set_drive_velocity(40, PERCENT)
-    right_measure_distance(422, 7)
+    right_measure_distance(422, 70)
     
 
 def _2a3b():
@@ -287,7 +287,7 @@ def _2a3b():
     long_left_turn(428)
     wait(1)
     place_in_box()
-    #food ball: all good
+    #food ball: bit bugged
     left_turn(87)
     claw_up()
     reverse_lights()
@@ -301,7 +301,7 @@ def _2a3b():
     smartdrive.drive(FORWARD)
     measure_distance()
     place_in_box()
-    #3b: all good
+    #3b: bugged
     left_measure_distance(430, 50)
     pusher.spin_to_position(2, DEGREES)
     smartdrive.set_drive_velocity(70)
@@ -315,9 +315,9 @@ def _2a3b():
     left_turn(34)
     claw_up()
     smartdrive.set_drive_velocity(10)
-    smartdrive.drive_for(FORWARD, 100, MM)
+    smartdrive.drive_for(FORWARD, 150, MM)
     claw_down()
-    left_turn(46)
+    left_turn(52)
     smartdrive.set_drive_velocity(40)
     smartdrive.drive(FORWARD)
     left_measure_distance(420, 100)
