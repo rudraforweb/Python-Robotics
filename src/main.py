@@ -121,8 +121,8 @@ def long_right_turn(turn):
     touchledleft.set_brightness(100)
     touchledleft.set_color(Color.WHITE)
     blink_orange_right()
-    rightmotor.spin_for(REVERSE, turn, DEGREES)
-    rightmotor.stop()
+    leftmotor.spin_for(FORWARD, turn, DEGREES)
+    leftmotor.stop()
     touchledleft.set_brightness(0)
     touchledright.set_brightness(0)
 def long_left_turn(turn):
@@ -259,6 +259,7 @@ def _1c():   #all good!
     smartdrive.set_drive_velocity(60,PERCENT)
     smartdrive.drive(FORWARD)
     black_line()
+    
     smartdrive.set_drive_velocity(30, PERCENT)
     right_measure_distance(445, 135)
     smartdrive.set_turn_velocity(20, PERCENT)
@@ -268,15 +269,14 @@ def _1c():   #all good!
     reverse_lights()
     smartdrive.drive_for(REVERSE, 185, MM)
     default_lights()
-    left_turn(94)
+    left_turn(93)
     place_in_box()
     right_turn(88)
     smartdrive.drive(FORWARD)
     smartdrive.set_drive_velocity(40, PERCENT)
     right_measure_distance(422, 70)
     
-def _2a3b():
-    #2a: all good
+def _2a():
     claw_up()
     smartdrive.set_drive_velocity(40,PERCENT)
     smartdrive.drive(FORWARD)
@@ -286,68 +286,8 @@ def _2a3b():
     long_left_turn(420)
     wait(1)
     place_in_box()
-    #food ball: bit bugged
-    left_turn(87)
-    claw_up()
-    reverse_lights()
-    smartdrive.drive_for(REVERSE, 350, MM)
-    default_lights()
-    left_turn(37)
-    smartdrive.drive_for(FORWARD, 190, MM)
-    claw_down()
-    smartdrive.drive_for(FORWARD, 90, MM)
-    wait(1, SECONDS)
-    left_turn(43)
-    smartdrive.drive(FORWARD)
-    measure_distance()
-    place_in_box()
-    #3b: all good
-    left_measure_distance(430, 50)
-    pusher.spin_to_position(2, DEGREES)
-    smartdrive.set_drive_velocity(70)
-    claw_up()
-    smartdrive.drive(FORWARD)
-    measure_distance_start()
-    reverse_lights()
-    smartdrive.drive_for(REVERSE, 350, MM)
-    default_lights()
-    smartdrive.set_drive_velocity(40)
-    left_turn(34)
-    claw_up()
-    smartdrive.set_drive_velocity(10)
-    smartdrive.drive_for(FORWARD, 150, MM)
-    claw_down()
-    left_turn(52)
-    smartdrive.set_drive_velocity(40)
-    smartdrive.drive(FORWARD)
-    left_measure_distance(420, 100)
-    smartdrive.drive(FORWARD)
-    while int(color.brightness()) >= 50: #type: ignore
-        wait(0.1, SECONDS)
-        smartdrive.set_stopping(HOLD)
-        if int(color.brightness()) <= 50: #type: ignore 
-            wait(0.1, SECONDS)
-            stop()
-            wait(1, SECONDS)
-            break
-    smartdrive.drive_for(FORWARD, 250, MM)
-    left_turn(88)
-    smartdrive.drive(FORWARD)
-    measure_distance()
-    place_in_box()
-    stop()
     
-def _2a3a():
-    #2a: all good
-    claw_up()
-    smartdrive.set_drive_velocity(40,PERCENT)
-    smartdrive.drive(FORWARD)
-    black_line()
-    smartdrive.set_drive_velocity(40,PERCENT)
-    smartdrive.drive_for(FORWARD, 320, MM)
-    long_left_turn(420)
-    wait(1)
-    place_in_box()
+def _3b():
     #food ball: bit bugged
     left_turn(87)
     claw_up()
@@ -364,7 +304,7 @@ def _2a3a():
     measure_distance()
     place_in_box()
     #3b: all good
-    left_measure_distance(430, 50)
+    left_measure_distance(445, 50)
     pusher.spin_to_position(2, DEGREES)
     smartdrive.set_drive_velocity(70)
     claw_up()
@@ -380,7 +320,9 @@ def _2a3a():
     smartdrive.drive_for(FORWARD, 150, MM)
     claw_down()
     right_turn(120)
-    right_measure_distance(430, 100)
+    smartdrive.drive_for(REVERSE, 20, MM)
+    right_turn(94)
+    smartdrive.set_drive_velocity(60)
     smartdrive.drive(FORWARD)
     while int(color.brightness()) >= 50: #type: ignore
         wait(0.1, SECONDS)
@@ -390,22 +332,70 @@ def _2a3a():
             stop()
             wait(1, SECONDS)
             break
-    smartdrive.drive_for(FORWARD, 250, MM)
-    right_turn(88)
+    long_right_turn(430)
+    smartdrive.drive(FORWARD)
+    measure_distance()
+    place_in_box()
+    stop()
+    
+def _3a():
+    #food ball: bit bugged
+    left_turn(87)
+    claw_up()
+    reverse_lights()
+    smartdrive.drive_for(REVERSE, 350, MM)
+    default_lights()
+    left_turn(37)
+    smartdrive.drive_for(FORWARD, 190, MM)
+    claw_down()
+    smartdrive.drive_for(FORWARD, 90, MM)
+    wait(1, SECONDS)
+    left_turn(43)
+    smartdrive.drive(FORWARD)
+    measure_distance()
+    place_in_box()
+    #3a: all good
+    left_measure_distance(445, 50)
+    pusher.spin_to_position(2, DEGREES)
+    smartdrive.set_drive_velocity(70)
+    claw_up()
+    smartdrive.drive(FORWARD)
+    measure_distance_start()
+    reverse_lights()
+    smartdrive.drive_for(REVERSE, 350, MM)
+    default_lights()
+    smartdrive.set_drive_velocity(40)
+    left_turn(34)
+    claw_up()
+    smartdrive.set_drive_velocity(10)
+    smartdrive.drive_for(FORWARD, 150, MM)
+    claw_down()
+    right_turn(120)
+    smartdrive.drive_for(REVERSE, 20, MM)
+    right_turn(94)
+    smartdrive.set_drive_velocity(60)
+    smartdrive.drive(FORWARD)
+    while int(color.brightness()) >= 50: #type: ignore
+        wait(0.1, SECONDS)
+        smartdrive.set_stopping(HOLD)
+        if int(color.brightness()) <= 50: #type: ignore 
+            wait(0.1, SECONDS)
+            stop()
+            wait(1, SECONDS)
+            break
+    long_right_turn(430)
     smartdrive.drive(FORWARD)
     measure_distance()
     place_in_box()
     stop()
 
-def _2b3a():
-    print("_2b3a is to be programmed at a later date.")
 
-def _2b3b():
-    print("_2b3b is to be programmed at a later date.")
+
 
 #Main code:
-#Choose between _2a3a(), _2a3b(), _2b3a(), or _2b3b(). _1c() and start() is required.
+#Choose between _2a, _2b, _3a, and _3b in the right order. _1c() and start() is required.
 start()
 _1c()
-_2a3a()
+_2a()
+_3a()
 
