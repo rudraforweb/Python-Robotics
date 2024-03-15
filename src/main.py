@@ -254,7 +254,6 @@ def start():
     right_turn(88)
 
 def food_ball():
-    left_turn(3)
     smartdrive.set_drive_velocity(60)
     smartdrive.drive_for(REVERSE, 29, INCHES)
 
@@ -292,7 +291,7 @@ def _2a(): #Good
     place_in_box()
     food_ball()
     
-def _2b(): #Testing
+def _2b(): #Good
     #collect 2:
     right_measure_distance(425, 70)
     claw_up()
@@ -303,16 +302,21 @@ def _2b(): #Testing
     smartdrive.drive_for(FORWARD, 320, MM)
     long_left_turn(418)
     wait(1)
+    smartdrive.set_drive_velocity(30,PERCENT)
     food_ball()
     #place 2 into b:
     smartdrive.drive(FORWARD)
     measure_distance_c()
-    right_turn(179)
+    right_turn(88)
+    smartdrive.drive_for(REVERSE, 225, MM)
+    leftmotor.spin_for(FORWARD, 419, DEGREES)
     smartdrive.drive(FORWARD)
-    measure_distance()
+    measure_distance_c()
     place_in_box()
     #go into 3 position:
-    left_turn(179)
+    left_turn(80)
+    smartdrive.drive_for(REVERSE, 170, MM)
+    rightmotor.spin_for(FORWARD, 436, DEGREES)
 
 def _3b(): #Good
     #3b:
@@ -371,13 +375,20 @@ def _3a(): #Good
     place_in_box()
     stop()
 
+def game_ending_task():
+    #place code here for the game ending task.
+    wait(1)
 
 
+#Instructions:
+#Choose between _2a(), _2b(), _3a(), and _3b() in the right order.
+#_1c() and start() is required. DO NOT put in food_ball().
+#Edit game_ending_task() to your own free will.
 
 #Main code:
-#Choose between _2a, _2b, _3a, and _3b in the right order. _1c() and start() is required. DO NOT put in food_ball().
 start()
 _1c()
 _2b()
 _3a()
+game_ending_task()
 
