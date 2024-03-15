@@ -66,6 +66,10 @@ brain.screen.clear_screen()
 claw_up_degrees = 40
 claw_down_degrees = 5
 
+bit_1 = 0
+bit_2 = 0
+bit_3 = 0
+
 #Touchleds:
 def default_lights():
     touchledright.set_brightness(5)
@@ -211,17 +215,19 @@ def place_in_box():
     claw_down()
 
 #Main code functions:
-def start():
+def start():   #Good
     claw_up()
     if int(color.brightness()) <= 50: #type: ignore 
         wait(0.1, SECONDS)
         stop()
         brain.screen.set_cursor(1,1)
         brain.screen.print("Bit 1: Black")
+        bit_1 = 0
         smartdrive.drive(FORWARD)
     else:
         brain.screen.set_cursor(1,1)
         brain.screen.print("Bit 1: White")
+        bit_1 = 1
 
 
     smartdrive.drive_for(FORWARD, 40, MM)
@@ -232,10 +238,12 @@ def start():
             stop()
             brain.screen.set_cursor(2,1)
             brain.screen.print("Bit 2: Black")
+            bit_2 = 0
             smartdrive.drive(FORWARD)
     else:
         brain.screen.set_cursor(2,1)
         brain.screen.print("Bit 2: White")
+        bit_2 = 1
 
     smartdrive.drive_for(FORWARD, 40, MM)
 
@@ -244,16 +252,18 @@ def start():
             stop()
             brain.screen.set_cursor(3,1)
             brain.screen.print("Bit 3: Black")
+            bit_3 = 0
             stop()
 
     else:
         brain.screen.set_cursor(3,1)
         brain.screen.print("Bit 3: White")
+        bit_3 = 1
         stop()
     
     right_turn(88)
 
-def food_ball():
+def food_ball(): #Good
     smartdrive.set_drive_velocity(60)
     smartdrive.drive_for(REVERSE, 29, INCHES)
 
@@ -377,6 +387,7 @@ def _3a(): #Good
 
 def game_ending_task():
     #place code here for the game ending task.
+    #The bits are called: bit_1, bit_2, and bit_3.
     wait(1)
 
 
