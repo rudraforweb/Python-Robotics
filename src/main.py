@@ -253,6 +253,11 @@ def start():
     
     right_turn(88)
 
+def food_ball():
+    left_turn(1)
+    smartdrive.set_drive_velocity(60)
+    smartdrive.drive_for(REVERSE, 29, INCHES)
+
 def _1c(): #Good
     smartdrive.drive(FORWARD)
     right_measure_distance(436, 20)
@@ -285,12 +290,29 @@ def _2a(): #Good
     long_left_turn(418)
     wait(1)
     place_in_box()
+    food_ball()
     
+def _2b(): #Not tested
+    #collect 2:
+    right_measure_distance(425, 70)
+    claw_up()
+    smartdrive.set_drive_velocity(40,PERCENT)
+    smartdrive.drive(FORWARD)
+    black_line()
+    smartdrive.set_drive_velocity(40,PERCENT)
+    smartdrive.drive_for(FORWARD, 320, MM)
+    long_left_turn(418)
+    wait(1)
+    food_ball()
+    #place 2 into b:
+    measure_distance_c()
+    right_turn(179)
+    measure_distance()
+    place_in_box()
+    #go into 3 position:
+    left_turn(179)
+
 def _3b(): #Good
-    #food ball:
-    left_turn(1)
-    smartdrive.set_drive_velocity(60)
-    smartdrive.drive_for(REVERSE, 29, INCHES)
     #3b:
     right_measure_distance(430, 5)
     pusher.spin_to_position(2, DEGREES)
@@ -320,10 +342,6 @@ def _3b(): #Good
     stop()
     
 def _3a(): #Working on
-    #food ball:
-    left_turn(1)
-    smartdrive.set_drive_velocity(60)
-    smartdrive.drive_for(REVERSE, 29, INCHES)
     #3a:
     right_measure_distance(430, 5)
     pusher.spin_to_position(2, DEGREES)
@@ -355,7 +373,7 @@ def _3a(): #Working on
 
 
 #Main code:
-#Choose between _2a, _2b, _3a, and _3b in the right order. _1c() and start() is required.
+#Choose between _2a, _2b, _3a, and _3b in the right order. _1c() and start() is required. DO NOT put in food_ball().
 start()
 _1c()
 _2a()
