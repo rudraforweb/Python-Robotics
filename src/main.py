@@ -254,7 +254,7 @@ def start():
     right_turn(88)
 
 def food_ball():
-    left_turn(1)
+    left_turn(3)
     smartdrive.set_drive_velocity(60)
     smartdrive.drive_for(REVERSE, 29, INCHES)
 
@@ -275,7 +275,7 @@ def _1c(): #Good
     default_lights()
     left_turn(94)
     place_in_box()
-    right_turn(87)
+    right_turn(89)
     smartdrive.drive(FORWARD)
     smartdrive.set_drive_velocity(40, PERCENT)
        
@@ -292,7 +292,7 @@ def _2a(): #Good
     place_in_box()
     food_ball()
     
-def _2b(): #Not tested
+def _2b(): #Testing
     #collect 2:
     right_measure_distance(425, 70)
     claw_up()
@@ -305,8 +305,10 @@ def _2b(): #Not tested
     wait(1)
     food_ball()
     #place 2 into b:
+    smartdrive.drive(FORWARD)
     measure_distance_c()
     right_turn(179)
+    smartdrive.drive(FORWARD)
     measure_distance()
     place_in_box()
     #go into 3 position:
@@ -341,17 +343,17 @@ def _3b(): #Good
     place_in_box()
     stop()
     
-def _3a(): #Working on
+def _3a(): #Good
     #3a:
-    right_measure_distance(430, 5)
+    right_measure_distance(435, 15)
     pusher.spin_to_position(2, DEGREES)
     smartdrive.set_drive_velocity(70)
     claw_up()
-    right_measure_distance(430, 50)
+    right_measure_distance(420, 50)
     smartdrive.set_drive_velocity(30)
-    smartdrive.drive_for(FORWARD, 200, MM)
+    smartdrive.drive_for(FORWARD, 120, MM)
     claw_down()
-    right_measure_distance(420, 80)
+    right_measure_distance(440, 80)
     smartdrive.set_drive_velocity(60)
     smartdrive.drive(FORWARD)
     while int(color.brightness()) >= 50: #type: ignore
@@ -376,6 +378,6 @@ def _3a(): #Working on
 #Choose between _2a, _2b, _3a, and _3b in the right order. _1c() and start() is required. DO NOT put in food_ball().
 start()
 _1c()
-_2a()
-_3b()
+_2b()
+_3a()
 
