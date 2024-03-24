@@ -39,7 +39,7 @@ wait(0.2, SECONDS)
 brain.screen.next_row()
 claw_motor = Motor(Ports.PORT10, False)
 claw_motor.set_max_torque(50, PERCENT)
-pusher = Motor(Ports.PORT5, True)
+pusher = Motor(Ports.PORT8, True)
 pusher.set_max_torque(100, PERCENT)
 brain.screen.print("Claw motor good!")
 wait(0.2, SECONDS)
@@ -198,10 +198,10 @@ def place_holder_text():
     brain.screen.set_cursor(2, 2)
     brain.screen.print("  Python-Robotics")    
 def black_line():
-    while int(color.brightness()) >= 50: #type: ignore
+    while int(color.brightness()) >= 25: #type: ignore
         wait(0.1, SECONDS)
         smartdrive.set_stopping(HOLD)
-        if int(color.brightness()) <= 50: #type: ignore 
+        if int(color.brightness()) <= 25: #type: ignore 
             wait(0.1, SECONDS)
             claw_down()
             stop()
@@ -215,7 +215,7 @@ def place_in_box():
     claw_down()
 
 #Main code functions:
-def start():   #Good
+def start(): #Good
     claw_up()
     if int(color.brightness()) <= 50: #type: ignore 
         wait(0.1, SECONDS)
@@ -267,33 +267,44 @@ def food_ball(): #Good
     smartdrive.set_drive_velocity(60)
     smartdrive.drive_for(REVERSE, 29, INCHES)
 
+def game_ending_task():
+    #place code here for the game ending task.
+    #The bits are called: bit_1, bit_2, and bit_3.
+    wait(1)
+
 def _1c(): #Good
+    #Collect 1:
     smartdrive.drive(FORWARD)
     right_measure_distance(436, 20)
-    smartdrive.set_drive_velocity(60,PERCENT)
+    smartdrive.set_drive_velocity(90,PERCENT)
+    smartdrive.drive_for(FORWARD, 11, INCHES)
+    smartdrive.set_drive_velocity(40,PERCENT)
     smartdrive.drive(FORWARD)
     black_line()
-    smartdrive.set_drive_velocity(30, PERCENT)
-    right_measure_distance(445, 100)
+    #Place 1 in C:
+    right_measure_distance(445, 125)
     smartdrive.set_turn_velocity(20, PERCENT)
     smartdrive.drive(FORWARD)
     measure_distance()
     wait(1)
     reverse_lights()
-    smartdrive.drive_for(REVERSE, 170, MM)
+    smartdrive.drive_for(REVERSE, 200, MM)
     default_lights()
-    left_turn(94)
+    left_turn(90)
     place_in_box()
     right_turn(89)
     smartdrive.drive(FORWARD)
     smartdrive.set_drive_velocity(40, PERCENT)
-       
+
+#2:       
 def _2a(): #Good
-    right_measure_distance(425, 70)
+    #Collect 2:
+    right_measure_distance(430, 70)
     claw_up()
     smartdrive.set_drive_velocity(40,PERCENT)
     smartdrive.drive(FORWARD)
     black_line()
+    #Place 2 in A:
     smartdrive.set_drive_velocity(40,PERCENT)
     smartdrive.drive_for(FORWARD, 320, MM)
     long_left_turn(418)
@@ -302,8 +313,8 @@ def _2a(): #Good
     food_ball()
     
 def _2b(): #Good
-    #collect 2:
-    right_measure_distance(425, 70)
+    #Collect 2:
+    right_measure_distance(430, 70)
     claw_up()
     smartdrive.set_drive_velocity(40,PERCENT)
     smartdrive.drive(FORWARD)
@@ -314,23 +325,94 @@ def _2b(): #Good
     wait(1)
     smartdrive.set_drive_velocity(30,PERCENT)
     food_ball()
-    #place 2 into b:
+    #Place 2 into b:
     smartdrive.drive(FORWARD)
     measure_distance_c()
     right_turn(88)
-    smartdrive.drive_for(REVERSE, 225, MM)
+    smartdrive.drive_for(REVERSE, 210, MM)
     leftmotor.spin_for(FORWARD, 419, DEGREES)
     smartdrive.drive(FORWARD)
     measure_distance_c()
     place_in_box()
-    #go into 3 position:
+    #Go into 3 position:
     left_turn(80)
     smartdrive.drive_for(REVERSE, 170, MM)
     rightmotor.spin_for(FORWARD, 436, DEGREES)
 
+def _2c(): #Good
+    #Collect 2:
+    right_measure_distance(430, 70)
+    claw_up()
+    smartdrive.set_drive_velocity(40,PERCENT)
+    smartdrive.drive(FORWARD)
+    black_line()
+    #Place 2 into C:
+    smartdrive.drive_for(REVERSE, 6, INCHES)
+    long_left_turn(418)
+    left_turn(94)
+    left_measure_distance(445, 140)
+    smartdrive.drive(FORWARD)
+    measure_distance()
+    reverse_lights()
+    smartdrive.drive_for(REVERSE, 200, MM)
+    default_lights()
+    right_turn(88)
+    place_in_box()
+    #Food ball:
+    right_turn(88)
+    right_measure_distance(425, 70)
+    claw_up()
+    smartdrive.drive(FORWARD)
+    while int(color.brightness()) >= 25: #type: ignore
+        wait(0.1, SECONDS)
+        smartdrive.set_stopping(HOLD)
+        if int(color.brightness()) <= 25: #type: ignore 
+            wait(0.1, SECONDS)
+            stop()
+            wait(1, SECONDS)
+            break
+    smartdrive.set_drive_velocity(40,PERCENT)
+    smartdrive.drive_for(FORWARD, 360, MM)
+    long_left_turn(420)
+    wait(1)
+    smartdrive.set_drive_velocity(20,PERCENT)
+    food_ball()
+    
+#3:
+def _3a(): #Good
+    #Collect 3:
+    right_measure_distance(425, 28)
+    pusher.spin_to_position(2, DEGREES)
+    smartdrive.set_drive_velocity(100)
+    smartdrive.drive_for(FORWARD, 50, INCHES)
+    smartdrive.set_drive_velocity(70)
+    claw_up()
+    right_measure_distance(420, 50)
+    smartdrive.set_drive_velocity(30)
+    smartdrive.drive_for(FORWARD, 120, MM)
+    claw_down()
+    #Place 3 in A:
+    right_measure_distance(440, 80)
+    smartdrive.set_drive_velocity(50)
+    smartdrive.drive(FORWARD)
+    while int(color.brightness()) >= 25: #type: ignore
+        wait(0.1, SECONDS)
+        smartdrive.set_stopping(HOLD)
+        if int(color.brightness()) <= 25: #type: ignore 
+            wait(0.1, SECONDS)
+            stop()
+            wait(1, SECONDS)
+            break
+    smartdrive.drive_for(FORWARD, 200, MM)
+    right_turn(88)
+    smartdrive.drive(FORWARD)
+    measure_distance()
+    place_in_box()
+    stop()    
+
 def _3b(): #Good
-    #3b:
-    right_measure_distance(430, 5)
+    #Collect 3:
+    right_measure_distance(425, 28)
     pusher.spin_to_position(2, DEGREES)
     smartdrive.set_drive_velocity(70)
     claw_up()
@@ -338,14 +420,15 @@ def _3b(): #Good
     smartdrive.set_drive_velocity(30)
     smartdrive.drive_for(FORWARD, 200, MM)
     claw_down()
+    #Place 3 in B:
     right_turn(179)
     left_measure_distance(420, 80)
-    smartdrive.set_drive_velocity(60)
+    smartdrive.set_drive_velocity(50)
     smartdrive.drive(FORWARD)
-    while int(color.brightness()) >= 50: #type: ignore
+    while int(color.brightness()) >= 25: #type: ignore
         wait(0.1, SECONDS)
         smartdrive.set_stopping(HOLD)
-        if int(color.brightness()) <= 50: #type: ignore 
+        if int(color.brightness()) <= 25: #type: ignore 
             wait(0.1, SECONDS)
             stop()
             wait(1, SECONDS)
@@ -357,49 +440,56 @@ def _3b(): #Good
     place_in_box()
     stop()
     
-def _3a(): #Good
-    #3a:
+def _3c(): #Good
+    #Collect 3:
+    smartdrive.set_drive_velocity(30,PERCENT)
+    right_measure_distance(425, 28)
+    claw_up()
     right_measure_distance(435, 15)
     pusher.spin_to_position(2, DEGREES)
-    smartdrive.set_drive_velocity(70)
-    claw_up()
-    right_measure_distance(420, 50)
     smartdrive.set_drive_velocity(30)
     smartdrive.drive_for(FORWARD, 120, MM)
     claw_down()
+    #Place 3 in C:
     right_measure_distance(440, 80)
-    smartdrive.set_drive_velocity(60)
+    smartdrive.set_drive_velocity(90)
+    smartdrive.drive_for(FORWARD, 40, INCHES)
+    smartdrive.set_drive_velocity(70)
     smartdrive.drive(FORWARD)
-    while int(color.brightness()) >= 50: #type: ignore
+    while int(color.brightness()) >= 25: #type: ignore
         wait(0.1, SECONDS)
         smartdrive.set_stopping(HOLD)
-        if int(color.brightness()) <= 50: #type: ignore 
+        if int(color.brightness()) <= 25: #type: ignore 
             wait(0.1, SECONDS)
             stop()
             wait(1, SECONDS)
             break
-    smartdrive.drive_for(FORWARD, 200, MM)
-    right_turn(88)
+    smartdrive.set_drive_velocity(30, PERCENT)
+    right_measure_distance(445, 100)
+    smartdrive.set_turn_velocity(20, PERCENT)
     smartdrive.drive(FORWARD)
     measure_distance()
-    place_in_box()
-    stop()
-
-def game_ending_task():
-    #place code here for the game ending task.
-    #The bits are called: bit_1, bit_2, and bit_3.
     wait(1)
+    reverse_lights()
+    smartdrive.drive_for(REVERSE, 170, MM)
+    default_lights()
+    left_turn(94)
+    place_in_box()
+    right_turn(94)
+    
+
+
 
 
 #Instructions:
-#Choose between _2a(), _2b(), _3a(), and _3b() in the right order.
+#Choose between _2a(), _2b(), _3a(), _3b(), 2c(), and 3c() in the right order.
 #_1c() and start() is required. DO NOT put in food_ball().
 #Edit game_ending_task() to your own free will.
 
 #Main code:
 start()
 _1c()
-_2b()
-_3a()
+_2a()
+_3b()
 game_ending_task()
 
