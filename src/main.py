@@ -230,7 +230,7 @@ def start(): #Good
         bit_1 = 1
 
 
-    smartdrive.drive_for(FORWARD, 40, MM)
+    smartdrive.drive_for(FORWARD, 45, MM)
 
 
     if int(color.brightness()) <= 50: #type: ignore 
@@ -245,7 +245,7 @@ def start(): #Good
         brain.screen.print("Bit 2: White")
         bit_2 = 1
 
-    smartdrive.drive_for(FORWARD, 40, MM)
+    smartdrive.drive_for(FORWARD, 45, MM)
 
     if int(color.brightness()) <= 50: #type: ignore 
             wait(0.1, SECONDS)
@@ -261,6 +261,8 @@ def start(): #Good
         bit_3 = 1
         stop()
     
+    smartdrive.drive_for(FORWARD, 45, MM)
+
     right_turn(88)
 
 def food_ball(): #Good
@@ -269,9 +271,10 @@ def food_ball(): #Good
 
 def game_ending_task():
     #place code here for the game ending task.
-    #The bits are called: bit_1, bit_2, and bit_3.
+    #The bits are named: bit_1, bit_2, and bit_3.
     wait(1)
 
+#1:
 def _1c(): #Good
     #Collect 1:
     smartdrive.drive(FORWARD)
@@ -476,8 +479,6 @@ def _3c(): #Good
     left_turn(94)
     place_in_box()
     right_turn(94)
-    
-
 
 
 
