@@ -48,6 +48,8 @@ brain.screen.print("Touchleds good!")
 wait(0.2, SECONDS)
 brain.screen.next_row()
 color =ColorSensor(Ports.PORT1)
+light =ColorSensor(Ports.PORT3)
+light.set_light(100, PERCENT)
 color.set_light(100, PERCENT)
 brain.screen.print("Color sensor good!")
 wait(0.2, SECONDS)
@@ -63,7 +65,7 @@ brain.screen.clear_screen()
 #End of "system check".
 
 #Define functions:
-claw_up_degrees = 40
+claw_up_degrees = 50
 claw_down_degrees = 5
 
 bit_1 = 0
@@ -275,7 +277,7 @@ def game_ending_task():
     wait(1)
 
 #1:
-def _1c(): #Good
+def _1c(): #Working on
     #Collect 1:
     smartdrive.drive(FORWARD)
     right_measure_distance(436, 20)
@@ -291,10 +293,11 @@ def _1c(): #Good
     measure_distance()
     wait(1)
     reverse_lights()
-    smartdrive.drive_for(REVERSE, 200, MM)
+    smartdrive.drive_for(REVERSE, 170, MM)
     default_lights()
-    left_turn(90)
+    left_turn(91)
     place_in_box()
+    #Go for 2:
     right_turn(89)
     smartdrive.drive(FORWARD)
     smartdrive.set_drive_velocity(40, PERCENT)
