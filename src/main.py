@@ -293,7 +293,7 @@ def _1c(): #Working on
     measure_distance()
     wait(1)
     reverse_lights()
-    smartdrive.drive_for(REVERSE, 180, MM)
+    smartdrive.drive_for(REVERSE, 200, MM)
     default_lights()
     left_turn(91)
     place_in_box()
@@ -313,7 +313,7 @@ def _2a(): #Good
     #Place 2 in A:
     smartdrive.set_drive_velocity(40,PERCENT)
     smartdrive.drive_for(FORWARD, 300, MM)
-    long_left_turn(418)
+    long_left_turn(423)
     wait(1)
     place_in_box()
     food_ball()
@@ -443,6 +443,7 @@ def _3b(): #Good
     left_turn(88)
     smartdrive.drive(FORWARD)
     measure_distance()
+    stop()
     place_in_box()
     stop()
     
