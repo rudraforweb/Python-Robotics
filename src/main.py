@@ -142,17 +142,17 @@ def long_left_turn(turn):
 
 #Measure distances:
 def measure_distance_start():
-    while distance.object_distance(INCHES) < 2:
+    while distance.object_distance(INCHES) < 2 or int(color.brightness()) >= 50: #type: ignore
         wait(0.1, SECONDS)
         smartdrive.set_drive_velocity(40, PERCENT)
-        if distance.object_distance(INCHES) > 2:
+        if distance.object_distance(INCHES) > 2 or int(color.brightness()) <= 50: #type: ignore
             smartdrive.drive_for(FORWARD, 65, MM)
             stop()
             break
 def measure_distance():
-    while distance.object_distance(INCHES) < 2:
+    while distance.object_distance(INCHES) < 2 or int(color.brightness()) >= 50: #type: ignore
         wait(0.1, SECONDS)
-        if distance.object_distance(INCHES) > 2:
+        if distance.object_distance(INCHES) > 2 or int(color.brightness()) <= 50: #type: ignore
             stop()
             wait(1)
             reverse_lights()
@@ -160,11 +160,11 @@ def measure_distance():
             default_lights()
             break
 def measure_distance_c():
-    while distance.object_distance(INCHES) < 2:
+    while distance.object_distance(INCHES) < 2 or int(color.brightness()) >= 50: #type: ignore
         wait(0.1, SECONDS)
         smartdrive.set_drive_velocity(40)
         smartdrive.set_stopping(HOLD)
-        if distance.object_distance(INCHES) > 2:
+        if distance.object_distance(INCHES) > 2 or int(color.brightness()) <= 50: #type: ignore
             stop()
             reverse_lights()
             smartdrive.drive_for(REVERSE, 50, MM)
@@ -172,10 +172,10 @@ def measure_distance_c():
             break 
 def right_measure_distance(right_measure, reverse_measure):
     smartdrive.drive(FORWARD)
-    while distance.object_distance(INCHES) < 2:
+    while distance.object_distance(INCHES) < 2 or int(color.brightness()) <= 50: #type: ignore
             wait(0.1, SECONDS)
             smartdrive.set_drive_velocity(40, PERCENT)
-            if distance.object_distance(INCHES) > 2:
+            if distance.object_distance(INCHES) > 2 or int(color.brightness()) >= 50: #type: ignore
                 stop()
                 smartdrive.drive_for(REVERSE, reverse_measure, MM)
                 leftmotor.spin_for(FORWARD, right_measure, DEGREES)
@@ -183,10 +183,10 @@ def right_measure_distance(right_measure, reverse_measure):
                 break
 def left_measure_distance(left_measure, reverse_measure):
     smartdrive.drive(FORWARD)
-    while distance.object_distance(INCHES) < 2:
+    while distance.object_distance(INCHES) < 2 or int(color.brightness()) <= 50: #type: ignore
             wait(0.1, SECONDS)
             smartdrive.set_drive_velocity(40, PERCENT)
-            if distance.object_distance(INCHES) > 2:
+            if distance.object_distance(INCHES) > 2 or int(color.brightness()) >= 50: #type: ignore
                 stop()
                 smartdrive.drive_for(REVERSE, reverse_measure, MM)
                 rightmotor.spin_for(FORWARD, left_measure, DEGREES)
@@ -305,7 +305,7 @@ def _1c(): #Working on
 #2:       
 def _2a(): #Good
     #Collect 2:
-    right_measure_distance(430, 70)
+    right_measure_distance(440, 80)
     claw_up()
     smartdrive.set_drive_velocity(40,PERCENT)
     smartdrive.drive(FORWARD)
@@ -313,7 +313,7 @@ def _2a(): #Good
     #Place 2 in A:
     smartdrive.set_drive_velocity(40,PERCENT)
     smartdrive.drive_for(FORWARD, 300, MM)
-    long_left_turn(423)
+    long_left_turn(418)
     wait(1)
     place_in_box()
     food_ball()
