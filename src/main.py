@@ -94,16 +94,10 @@ def reverse_lights():
 def blink_orange_left():
     touchledleft.set_brightness(100)
     touchledleft.set_color(Color.ORANGE)
-    wait(400)  # Wait for 500 milliseconds (0.5 seconds)
-    touchledleft.set_brightness(0)
-    wait(400)  # Wait for another 500 milliseconds (0.5 seconds)
     touchledleft.set_brightness(100)
 def blink_orange_right():
     touchledright.set_brightness(100)
     touchledright.set_color(Color.YELLOW_ORANGE)
-    wait(400)  # Wait for 500 milliseconds (0.5 seconds)
-    touchledright.set_brightness(0)
-    wait(400)  # Wait for another 500 milliseconds (0.5 seconds)
     touchledright.set_brightness(100)
 
 #Claw motor:
@@ -145,14 +139,14 @@ def measure_distance_start():
     while distance.object_distance(INCHES) < 2: 
         wait(0.1, SECONDS)
         smartdrive.set_drive_velocity(40, PERCENT)
-        if distance.object_distance(INCHES) > 2 or int(color.brightness()) <= 20: #type: ignore
+        if distance.object_distance(INCHES) > 2: #type: ignore
             smartdrive.drive_for(FORWARD, 65, MM)
             stop()
             break
 def measure_distance():
     while distance.object_distance(INCHES) < 2:
         wait(0.1, SECONDS)
-        if distance.object_distance(INCHES) > 2 or int(color.brightness()) <= 20: #type: ignore
+        if distance.object_distance(INCHES) > 2: #type: ignore
             stop()
             wait(1)
             reverse_lights()
@@ -164,7 +158,7 @@ def measure_distance_c():
         wait(0.1, SECONDS)
         smartdrive.set_drive_velocity(40)
         smartdrive.set_stopping(HOLD)
-        if distance.object_distance(INCHES) > 2 or int(color.brightness()) <= 20: #type: ignore
+        if distance.object_distance(INCHES) > 2: #type: ignore
             stop()
             reverse_lights()
             smartdrive.drive_for(REVERSE, 50, MM)
@@ -175,7 +169,7 @@ def right_measure_distance(right_measure, reverse_measure):
     while distance.object_distance(INCHES) < 2:
             wait(0.1, SECONDS)
             smartdrive.set_drive_velocity(40, PERCENT)
-            if distance.object_distance(INCHES) > 2 or int(color.brightness()) <= 20: #type: ignore
+            if distance.object_distance(INCHES) > 2: #type: ignore
                 stop()
                 smartdrive.drive_for(REVERSE, reverse_measure, MM)
                 leftmotor.spin_for(FORWARD, right_measure, DEGREES)
@@ -186,7 +180,7 @@ def left_measure_distance(left_measure, reverse_measure):
     while distance.object_distance(INCHES) < 2:
             wait(0.1, SECONDS)
             smartdrive.set_drive_velocity(40, PERCENT)
-            if distance.object_distance(INCHES) > 2 or int(color.brightness()) <= 20: #type: ignore
+            if distance.object_distance(INCHES) > 2: #type: ignore
                 stop()
                 smartdrive.drive_for(REVERSE, reverse_measure, MM)
                 rightmotor.spin_for(FORWARD, left_measure, DEGREES)
@@ -224,12 +218,12 @@ def start(): #Good
         stop()
         brain.screen.set_cursor(1,1)
         brain.screen.print("Bit 1: Black")
-        bit_1 = 0
+        bit_1 = 1
         smartdrive.drive(FORWARD)
     else:
         brain.screen.set_cursor(1,1)
         brain.screen.print("Bit 1: White")
-        bit_1 = 1
+        bit_1 = 0
 
 
     smartdrive.drive_for(FORWARD, 45, MM)
@@ -240,12 +234,12 @@ def start(): #Good
             stop()
             brain.screen.set_cursor(2,1)
             brain.screen.print("Bit 2: Black")
-            bit_2 = 0
+            bit_2 = 1
             smartdrive.drive(FORWARD)
     else:
         brain.screen.set_cursor(2,1)
         brain.screen.print("Bit 2: White")
-        bit_2 = 1
+        bit_2 = 0
 
     smartdrive.drive_for(FORWARD, 45, MM)
 
@@ -254,13 +248,13 @@ def start(): #Good
             stop()
             brain.screen.set_cursor(3,1)
             brain.screen.print("Bit 3: Black")
-            bit_3 = 0
+            bit_3 = 1
             stop()
 
     else:
         brain.screen.set_cursor(3,1)
         brain.screen.print("Bit 3: White")
-        bit_3 = 1
+        bit_3 = 0
         stop()
     
     smartdrive.drive_for(FORWARD, 45, MM)
@@ -275,20 +269,20 @@ def game_ending_task():
     #place code here for the game ending task.
     #The bits are named: bit_1, bit_2, and bit_3.
     wait(1)
+    brain.screen.set_cursor(5,1)
+    brain.screen.print(bit_1 + bit_2 + bit_3 + 3)
 
 #1:
 def _1c(): #Good
     #Collect 1:
     smartdrive.drive(FORWARD)
-    right_measure_distance(440, 26)
-    smartdrive.set_drive_velocity(90,PERCENT)
-    smartdrive.drive_for(FORWARD, 11, INCHES)
+    right_measure_distance(445, 65)
     smartdrive.set_drive_velocity(40,PERCENT)
     smartdrive.drive(FORWARD)
     black_line()
     smartdrive.drive_for(FORWARD, 100, MM)
     #Place 1 in C:
-    right_measure_distance(445, 125)
+    right_measure_distance(440, 137)
     smartdrive.set_turn_velocity(20, PERCENT)
     smartdrive.drive(FORWARD)
     measure_distance()
@@ -306,7 +300,7 @@ def _1c(): #Good
 #2:       
 def _2a(): #Good
     #Collect 2:
-    right_measure_distance(442, 75)
+    right_measure_distance(442, 80)
     claw_up()
     smartdrive.set_drive_velocity(40,PERCENT)
     smartdrive.drive(FORWARD)
@@ -322,7 +316,7 @@ def _2a(): #Good
     
 def _2b(): #Good
     #Collect 2:
-    right_measure_distance(430, 70)
+    right_measure_distance(440, 90)
     claw_up()
     smartdrive.set_drive_velocity(40,PERCENT)
     smartdrive.drive(FORWARD)
@@ -331,7 +325,7 @@ def _2b(): #Good
     smartdrive.drive_for(FORWARD, 320, MM)
     long_left_turn(418)
     wait(1)
-    smartdrive.set_drive_velocity(30,PERCENT)
+    smartdrive.set_drive_velocity(20,PERCENT)
     food_ball()
     #Place 2 into b:
     smartdrive.drive(FORWARD)
@@ -349,7 +343,7 @@ def _2b(): #Good
 
 def _2c(): #Good
     #Collect 2:
-    right_measure_distance(430, 70)
+    right_measure_distance(430, 80)
     claw_up()
     smartdrive.set_drive_velocity(40,PERCENT)
     smartdrive.drive(FORWARD)
@@ -358,7 +352,7 @@ def _2c(): #Good
     smartdrive.drive_for(REVERSE, 6, INCHES)
     long_left_turn(418)
     left_turn(94)
-    left_measure_distance(445, 140)
+    left_measure_distance(445, 150)
     smartdrive.drive(FORWARD)
     measure_distance()
     reverse_lights()
@@ -368,7 +362,7 @@ def _2c(): #Good
     place_in_box()
     #Food ball:
     right_turn(88)
-    right_measure_distance(425, 70)
+    right_measure_distance(446, 77)
     claw_up()
     smartdrive.drive(FORWARD)
     while int(color.brightness()) >= 25: #type: ignore
@@ -381,15 +375,15 @@ def _2c(): #Good
             break
     smartdrive.set_drive_velocity(40,PERCENT)
     smartdrive.drive_for(FORWARD, 360, MM)
-    long_left_turn(420)
+    long_left_turn(427)
     wait(1)
-    smartdrive.set_drive_velocity(20,PERCENT)
+    smartdrive.set_drive_velocity(15,PERCENT)
     food_ball()
     
 #3:
 def _3a(): #Good
     #Collect 3:
-    right_measure_distance(425, 118)
+    right_measure_distance(425, 116)
     pusher.spin_to_position(2, DEGREES)
     smartdrive.set_drive_velocity(100)
     smartdrive.drive_for(FORWARD, 40, INCHES)
@@ -413,7 +407,7 @@ def _3a(): #Good
             stop()
             wait(1, SECONDS)
             break
-    smartdrive.drive_for(FORWARD, 200, MM)
+    smartdrive.drive_for(FORWARD, 360, MM)
     right_turn(88)
     smartdrive.drive(FORWARD)
     measure_distance()
@@ -422,7 +416,7 @@ def _3a(): #Good
 
 def _3b(): #Good
     #Collect 3:
-    right_measure_distance(425, 118)
+    right_measure_distance(425, 116)
     pusher.spin_to_position(2, DEGREES)
     smartdrive.set_drive_velocity(100)
     smartdrive.drive_for(FORWARD, 40, INCHES)
@@ -457,7 +451,7 @@ def _3b(): #Good
     
 def _3c(): #Good
     #Collect 3:
-    right_measure_distance(425, 115)
+    right_measure_distance(425, 114)
     pusher.spin_to_position(2, DEGREES)
     smartdrive.set_drive_velocity(100)
     smartdrive.drive_for(FORWARD, 40, INCHES)
@@ -467,7 +461,7 @@ def _3c(): #Good
     claw_up()
     right_measure_distance(430, 50)
     smartdrive.set_drive_velocity(30)
-    smartdrive.drive_for(FORWARD, 200, MM)
+    smartdrive.drive_for(FORWARD, 150, MM)
     claw_down()
     #Place 3 in C:
     right_measure_distance(440, 80)
@@ -504,7 +498,7 @@ def _3c(): #Good
 #Main code:
 start()
 _1c()
-_2a()
+_2b()
 _3c()
 game_ending_task()
 
